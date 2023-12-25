@@ -42,13 +42,14 @@ type Athelete = {
     positionBasketball: string
 }
 
-enum BasketballPositions {
+export enum BasketballPositions {
     pointGuard,
     shootingGuard,
     smallForward,
     powerForward,
-    center: string
+    center
 }
+
 enum FootballOffensiveLinePositions {
     center,
     leftGuard,
@@ -255,10 +256,8 @@ type FootballStatsSpecialTeams = {
     blockedPunts: number
 }
 
-
-
-type BasketballPlayer = {
-    athlete: Athelete
+export interface IBasketballPlayer {
+    readonly athlete: Athelete
     position: BasketballPositions
     currentTeamId: number
     currentSeasonStats: BasketballStats
@@ -272,9 +271,98 @@ type FootballPlayer = {
 type DepthChart = {
    name: Array<Athelete>
 }
+type BasketballDepthChart = {
+    pg1: BasketballPlayer
+    pg2: BasketballPlayer
+    sg1: BasketballPlayer
+    sg2: BasketballPlayer
+    sf1: BasketballPlayer
+    sf2: BasketballPlayer
+    pf1: BasketballPlayer
+    pf2: BasketballPlayer
+    c1: BasketballPlayer
+    c2: BasketballPlayer
+    reserve1: BasketballPlayer
+    reserve2: BasketballPlayer
+}
+type BasketballStartingLineup = {
+    pg1: BasketballPlayer
+    sg1: BasketballPlayer
+    sf1: BasketballPlayer
+    pf1: BasketballPlayer
+    c1: BasketballPlayer
+}
+type FootballDepthChart = {
+    offensiveSkillDepthChart: FootballOffensiveSkillDepthChart
+    offensiveLineDepthChart: FootballOffensiveLineDepthChart
+    defensiveLineDepthChart: FootballDefensiveLineDepthChart
+    defensiveLineBackerDepthChart: FootballDefensiveLineBackerDepthChart
+    defensiveBackDepthChart: FootballDefensiveBackDepthChart
+    specialTeamsDepthChart: FootballSpecialTeamsDepthChart
+}
+type FootballOffensiveSkillDepthChart = {
+    quarterback1: FootballPlayer
+    quarterback2: FootballPlayer
+    runningBack1: FootballPlayer
+    runningBack2: FootballPlayer
+    runningBack3: FootballPlayer
+    wideReceiver1: FootballPlayer
+    wideReceiver2: FootballPlayer
+    wideReceiver3: FootballPlayer
+    wideReceiver4: FootballPlayer
+    tightEnd1: FootballPlayer
+    tightEnd2: FootballPlayer
+}
+type FootballOffensiveLineDepthChart = {
+    leftTackle1: FootballPlayer
+    leftTackle2: FootballPlayer
+    leftGuard1: FootballPlayer
+    leftGuard2: FootballPlayer
+    center1: FootballPlayer
+    center2: FootballPlayer
+    rightGuard1: FootballPlayer
+    rightGuard2: FootballPlayer
+    rightTackle1: FootballPlayer
+    rightTackle2: FootballPlayer
+}
+type FootballDefensiveLineDepthChart = {
+    defensiveEnd1: FootballPlayer
+    defensiveEnd2: FootballPlayer
+    defensiveTackle1: FootballPlayer
+    defensiveTackle2: FootballPlayer
+}
+type FootballDefensiveLineBackerDepthChart = {
+    outsideLinebacker1: FootballPlayer
+    outsideLinebacker2: FootballPlayer
+    middleLinebacker1: FootballPlayer
+    middleLinebacker2: FootballPlayer
+}
+type FootballDefensiveBackDepthChart = {
+    cornerback1: FootballPlayer
+    cornerback2: FootballPlayer
+    cornerback3: FootballPlayer
+    cornerback4: FootballPlayer
+    safety1: FootballPlayer
+    safety2: FootballPlayer
+    safety3: FootballPlayer
+    safety4: FootballPlayer
+}
+type FootballSpecialTeamsDepthChart = {
+    kicker1: FootballPlayer
+    kicker2: FootballPlayer
+    punter1: FootballPlayer
+    punter2: FootballPlayer
+    kickReturner1: FootballPlayer
+    kickReturner2: FootballPlayer
+    puntReturner1: FootballPlayer
+    puntReturner2: FootballPlayer
+    longSnapper1: FootballPlayer
+    longSnapper2: FootballPlayer
+}
 interface IBasketballTeam {
-   depthChart: Array<BasketballPlayer>
-   startingLineup: Array<BasketballPlayer> 
+    depthChart: BasketballDepthChart
+    startingLineup: Array<BasketballPlayer> 
+    readonly teamId: number
 }
 interface IFootballTeam {
    depthChart: DepthChart
@@ -296,32 +384,91 @@ class DraftMachine {
 }
 
 // Models >>>
-class Team {}
+class Team {
+    name: string
+
+    constructor(name: string) {
+        this.name = name
+    }
+}
+
+class Player {
+}
 class User {}
-// class Player {}
 class Prospect {}
 // <<< Models
 
 // Basketball >>>
-class BasketballTeam extends Team implements IBasketballTeam {
-   depthChart: Array<BasketballPlayer>
+// Users will have the ability to create a basketball team and add players to
+// an already existing team. They will also be able to create a depth chart for
+// this team and set a starting lineup. Users can also remove players from the
+// team and depth chart.
+export class BasketballTeam extends Team implements IBasketballTeam {
+   depthChart: BasketballDepthChart
    _startingLineup: Array<BasketballPlayer>
+   readonly _teamId: string
 
-   constructor(depthChart: Array<BasketballPlayer>) {
-      super()
-      this.depthChart = depthChart
+   constructor(name: string, depthChart: BasketballDepthChart = {
+            pg1: null, pg2: null, sg1: null, sg2: null,
+            sf1: null, sf2: null, pf1: null, pf2: null,
+            c1: null, c2: null, reserve1: null, reserve2: null
+    }) {
+        super(name)
+        this.depthChart = depthChart
+        // Generate a unique id for the team prepended with the team name anb
+        // bball
+        this._teamId = `bball-${name}--${crypto.randomUUID()}`
    }
 
-   set
-   startingLineup(val: Array<BasketballPlayer>) {
-      // Create Implementation Details
-     this._startingLineup = val
-   }
    get
-   startingLineup() {
-     return this._startingLineup
+   teamId() {
+       ths._teamId
    }
 
+    set
+    startingLineup(val: Array<BasketballPlayer>) {
+        // Check if all players in the starting lineup are in the depth chart
+        const areAllPlayersInDepthChart = val.every(player =>
+            Object.values(this.depthChart).includes(player)
+        );
+
+        // If all players in the starting lineup are in the depth chart, set
+        // theo starting lineup. Otherwise, throw an error.
+        if (areAllPlayersInDepthChart) {
+            this._startingLineup = val;
+        } else {
+            throw new Error("All players in the starting lineup must be from the depth chart.");
+        }
+   }
+    get
+    startingLineup() {
+        return this._startingLineup
+    }
+}
+
+export class BasketballPlayer extends Player implements IBasketballPlayer {
+    private _athlete: Athelete
+    position: BasketballPositions
+    currentTeamId: number
+    currentSeasonStats: BasketballStats
+
+    constructor(athlete: Athelete, position: BasketballPositions, currentTeamId: number, currentSeasonStats: BasketballStats) {
+        super()
+        this._athlete = athlete
+        this.position = position
+        this.currentTeamId = currentTeamId
+        this.currentSeasonStats = currentSeasonStats
+    }
+
+    set
+    athlete(val: Athelete) {
+        throw new Error("Cannot modify athlete");
+    }
+
+    get
+    athlete() {
+        return this._athlete
+    }
 }
 // <<< Basketball
 
