@@ -120,8 +120,22 @@ describe('BasketballTeam 🏀', () => {
 
         const player = new BasketballPlayer(mockAthlete, mockPosition, mockTeamId, mockStats);
 
-        team.depthChart.pg1 = player;
-        expect(team.depthChart.pg1).toBe(player)
+        team.updateDepthChart('sg2', player);
+
+        expect(team.depthChart.sg2.athlete.firstName).toBe(player.athlete.firstName);
+    })
+
+    // Cant add same player to multiple positions
+    it('should not add the same player to multiple positions', () => {
+        const team = new BasketballTeam('Shooting Stars');
+
+        const player = new BasketballPlayer(mockAthlete, mockPosition, mockTeamId, mockStats);
+
+        team.updateDepthChart('sg2', player);
+
+        expect(() => {
+            team.updateDepthChart('sg1', player);
+        }).toThrow();
     })
 
     it('should set a starting lineup', () => {
@@ -133,9 +147,9 @@ describe('BasketballTeam 🏀', () => {
         const team = new BasketballTeam("Test Team");
 
         // Adding players to the team's depth chart
-        team.depthChart.pg1 = player1;
-        team.depthChart.sg1 = player2;
-        team.depthChart.sf1 = player3;
+        team.updateDepthChart('pg1', player1);
+        team.updateDepthChart('sg1', player2);
+        team.updateDepthChart('sf1', player3);
 
         // Setting the starting lineup
         team.startingLineup = [player1, player2, player3];
@@ -152,11 +166,11 @@ describe('BasketballTeam 🏀', () => {
         const player = new BasketballPlayer(mockAthlete, mockPosition, mockTeamId, mockStats);
 
         // Adding a player to the team's depth chart
-        team.depthChart.pg1 = player;
+        team.updateDepthChart('pg1', player);
         expect(team.depthChart.pg1).toBe(player)
 
         // Removing the player from the team's depth chart
-        team.depthChart.pg1 = null;
+        team.removePlayerFromDepthChart('pg1');
         expect(team.depthChart.pg1).toBeNull();
     })
 
@@ -166,7 +180,7 @@ describe('BasketballTeam 🏀', () => {
 
         const player = new BasketballPlayer(mockAthlete, mockPosition, mockTeamId, mockStats);
 
-        team.depthChart.pg1 = player;
+        team.updateDepthChart('pg1', player);
         expect(team.depthChart.pg1).toBe(player)
 
         // try to change the athlete
@@ -196,6 +210,23 @@ describe('BasketballTeam 🏀', () => {
         // expect the teadId to contain the word bball
         expect(team.teamId).toContain('bball');
         expect(team.teamId).toContain(team.name);
+    })
+
+    // should not be able to exceed the amount of players on the depth chart
+    it('should not be able to exceed the amount of players on the depth chart', () => {
+        const team = new BasketballTeam('Shooting Stars', 'New York');
+
+        const player = new BasketballPlayer(mockAthlete, mockPosition, mockTeamId, mockStats);
+        const player2 = new BasketballPlayer(mockAthlete2, mockPosition2, mockTeamId2, mockStats2);
+        const player3 = new BasketballPlayer(mockAthlete3, mockPosition3, mockTeamId3, mockStats3);
+
+        team.depthChart.pg1 = player;
+        team.depthChart.pg2 = player2;
+        team.depthChart.pg3 = player3;
+
+        expect(() => {
+            team.depthChart.pg3.athlete = mockAthlete3;
+        }).toThrow();
     })
 });
 

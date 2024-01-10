@@ -406,7 +406,7 @@ class Prospect {}
 // this team and set a starting lineup. Users can also remove players from the
 // team and depth chart.
 export class BasketballTeam extends Team implements IBasketballTeam {
-   depthChart: BasketballDepthChart
+   private _depthChart: BasketballDepthChart
    _startingLineup: Array<BasketballPlayer>
    private readonly _teamId: string
 
@@ -416,7 +416,7 @@ export class BasketballTeam extends Team implements IBasketballTeam {
             c1: null, c2: null, reserve1: null, reserve2: null
     }) {
         super(name, location)
-        this.depthChart = depthChart
+        this._depthChart = depthChart
         // Generate a unique id for the team prepended with the team name anb
         // bball
         this._teamId = `bball-${name}--${crypto.randomUUID()}`
@@ -425,6 +425,10 @@ export class BasketballTeam extends Team implements IBasketballTeam {
     get
     teamId() {
         return this._teamId
+    }
+
+    private isPlayerInDepthChart(player: BasketballPlayer): boolean {
+        return Object.values(this._depthChart).includes(player);
     }
 
     set
@@ -436,7 +440,7 @@ export class BasketballTeam extends Team implements IBasketballTeam {
 
         // If all players in the starting lineup are in the depth chart, set
         // theo starting lineup. Otherwise, throw an error.
-        if (areAllPlayersInDepthChart) {
+        if (val.every(player => this.isPlayerInDepthChart(player))) {
             this._startingLineup = val;
         } else {
             throw new Error("All players in the starting lineup must be from the depth chart.");
@@ -446,6 +450,40 @@ export class BasketballTeam extends Team implements IBasketballTeam {
     get
     startingLineup() {
         return this._startingLineup
+    }
+
+    updateDepthChart(position: keyof BasketballPositions, player: BasketballPlayer | null): void {
+        if (position in this._depthChart) {
+            if (player !== null && this.isPlayerInDepthChart(player)) {
+                throw new Error("Player is already assigned to a position in the depth chart.");
+            }
+            this._depthChart[position] = player;
+        } else {
+            throw new Error(`Invalid position: ${position}`);
+        }
+
+        this.updateStartingLineup();
+    }
+
+    removePlayerFromDepthChart(position: keyof BasketballDepthChart): void {
+        if (position in this._depthChart) {
+            this._depthChart[position] = null;
+        } else {
+            throw new Error(`Invalid position: ${position}`);
+        }
+
+        this.updateStartingLineup();
+    }
+
+    private updateStartingLineup(): void {
+        if(this._startingLineup) {
+            this._startingLineup = this._startingLineup.filter(player => this.isPlayerInDepthChart(player));
+        }
+    }
+
+    get
+    depthChart(): BasketballDepthChart {
+        return this._depthChart;
     }
 }
 
