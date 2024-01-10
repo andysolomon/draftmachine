@@ -175,7 +175,28 @@ describe('BasketballTeam 🏀', () => {
         }).toThrow();
     })
 
+    // test changing team name and location
+    it('should change team name and location', () => {
+        const team = new BasketballTeam('Shooting Stars', 'New York');
 
+        team.name = 'New Name';
+        team.location = 'New Location';
+
+        expect(team.name).toBe('New Name');
+        expect(team.location).toBe('New Location');
+    })
+
+    // shouldnt be able to change teamId and should contain team name and bball
+    it('should not be able to change teamId', () => {
+        const team = new BasketballTeam('Shooting Stars', 'New York');
+
+        expect(() => {
+            team.teamId = 2;
+        }).toThrow();
+        // expect the teadId to contain the word bball
+        expect(team.teamId).toContain('bball');
+        expect(team.teamId).toContain(team.name);
+    })
 });
 
 describe('Generic Athlete 😐', () => {
