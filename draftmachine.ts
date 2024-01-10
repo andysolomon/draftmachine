@@ -386,9 +386,11 @@ class DraftMachine {
 // Models >>>
 class Team {
     name: string
+    location: string
 
-    constructor(name: string) {
+    constructor(name: string, location: string) {
         this.name = name
+        this.location = location
     }
 }
 
@@ -406,24 +408,24 @@ class Prospect {}
 export class BasketballTeam extends Team implements IBasketballTeam {
    depthChart: BasketballDepthChart
    _startingLineup: Array<BasketballPlayer>
-   readonly _teamId: string
+   private readonly _teamId: string
 
-   constructor(name: string, depthChart: BasketballDepthChart = {
+   constructor(name: string, location = '',  depthChart: BasketballDepthChart = {
             pg1: null, pg2: null, sg1: null, sg2: null,
             sf1: null, sf2: null, pf1: null, pf2: null,
             c1: null, c2: null, reserve1: null, reserve2: null
     }) {
-        super(name)
+        super(name, location)
         this.depthChart = depthChart
         // Generate a unique id for the team prepended with the team name anb
         // bball
         this._teamId = `bball-${name}--${crypto.randomUUID()}`
-   }
+    }
 
-   get
-   teamId() {
-       ths._teamId
-   }
+    get
+    teamId() {
+        return this._teamId
+    }
 
     set
     startingLineup(val: Array<BasketballPlayer>) {
@@ -439,7 +441,8 @@ export class BasketballTeam extends Team implements IBasketballTeam {
         } else {
             throw new Error("All players in the starting lineup must be from the depth chart.");
         }
-   }
+    }
+
     get
     startingLineup() {
         return this._startingLineup
