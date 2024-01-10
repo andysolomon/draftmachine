@@ -1,4 +1,4 @@
-import { BasketballTeam, BasketballPositions, BasketballPlayer, IBasketballPlayer } from './draftmachine'
+import { BasketballTeam, BasketballPositions, BasketballPlayer, IBasketballPlayer, Athlete } from './draftmachine'
 
 const mockAthlete = {
     firstName: 'John',
@@ -161,7 +161,7 @@ describe('BasketballTeam 🏀', () => {
     })
 
     // test for readonly athlete property
-    it('should have a readonly athlete prop', () => {
+    it('should not be able to update an athlete from Basketball Team instance', () => {
         const team = new BasketballTeam('Shooting Stars');
 
         const player = new BasketballPlayer(mockAthlete, mockPosition, mockTeamId, mockStats);
@@ -174,5 +174,19 @@ describe('BasketballTeam 🏀', () => {
             team.depthChart.pg1.athlete = mockAthlete2;
         }).toThrow();
     })
+
+
 });
+
+describe('Generic Athlete 😐', () => {
+    // test to update athlete attributes
+    it('should update athlete attributes', () => {
+        const athlete = new Athlete(mockAthlete);
+
+        athlete.firstName = 'Jessica';
+        athlete.weight = 200;
+
+        expect(athlete.firstName).toBe('Jessica');
+    })
+})
 
