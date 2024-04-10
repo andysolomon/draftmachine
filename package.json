@@ -4,12 +4,14 @@
   "type": "module",
   "devDependencies": {
     "bun-types": "latest",
-    "prisma": "^5.12.1"
+    "prisma": "^5.12.1",
+    "supertest": "^6.3.4"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@prisma/client": "5.12.1"
+    "@prisma/client": "5.12.1",
+    "express": "^4.19.2"
   }
 }
