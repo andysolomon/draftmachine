@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Define your own datamodels here and run `prisma generate` to create
+enum BasketballPositions {
+  pointGuard
+  shootingGuard
+  smallForward
+  powerForward
+  center
+}
+
+// Represents an athlete who may or may not be a basketball player
+model Athlete {
+  id                 Int                  @id @default(autoincrement())
+  firstName          String
+  lastName           String
+  dateOfBirth        DateTime
+  collegeId          Int // This should reference the College model's ID
+  highSchool         String
+  height             Float
+  weight             Float
+  positionFootball   String?
+  positionBasketball BasketballPositions?
+  college            College              @relation(fields: [collegeId], references: [id])
+  basketballPlayer   BasketballPlayer? // Assuming an athlete might not always be a basketball player
+  BasketballStats    BasketballStats?
+}
+
+// Represents a basketball player extending the Athlete model
+model BasketballPlayer {
+  id                   Int                 @id @default(autoincrement())
+  athleteId            Int                 @unique
+  position             BasketballPositions
+  currentTeamId        Int?
+  currentSeasonStatsId Int?
+  athlete              Athlete             @relation(fields: [athleteId], references: [id])
+  currentTeam          BasketballTeam?     @relation(fields: [currentTeamId], references: [id])
+  currentSeasonStats   BasketballStats?    @relation(fields: [currentSeasonStatsId], references: [id])
+}
+
+// Represents a basketball team
+model BasketballTeam {
+  id       Int                @id @default(autoincrement())
+  name     String
+  location String
+  players  BasketballPlayer[]
+}
+
+// Represents a player's stats for a given season
+model BasketballStats {
+  id                     Int                 @id @default(autoincrement())
+  athleteId              Int                 @unique
+  position               BasketballPositions
+  points                 Int
+  rebounds               Int
+  assists                Int
+  steals                 Int
+  blocks                 Int
+  turnovers              Int
+  fieldGoalsMade         Int
+  fieldGoalsAttempted    Int
+  threePointersMade      Int
+  threePointersAttempted Int
+  freeThrowsMade         Int
+  freeThrowsAttempted    Int
+  minutesPlayed          Int
+  gamesPlayed            Int
+  gamesStarted           Int
+  personalFouls          Int
+  technicalFouls         Int
+  flagrantFouls          Int
+  ejections              Int
+  athlete                Athlete             @relation(fields: [athleteId], references: [id])
+  BasketballPlayer       BasketballPlayer[]
+}
+
+model College {
+  id             Int       @id @default(autoincrement())
+  name           String
+  state          String
+  dateStarted    DateTime
+  dateEnded      DateTime?
+  graduationDate DateTime?
+  major          String
+  url            String
+  athletes       Athlete[]
+}
