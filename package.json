@@ -2,7 +2,13 @@
   "name": "draftmachine",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
   "devDependencies": {
+    "@types/react": "18.2.78",
     "bun-types": "latest",
     "prisma": "^5.12.1",
     "supertest": "^6.3.4"
@@ -12,6 +18,12 @@
   },
   "dependencies": {
     "@prisma/client": "5.12.1",
-    "express": "^4.19.2"
+    "autoprefixer": "^10.4.19",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "next": "^14.2.1",
+    "postcss": "^8.4.38"
   }
 }
