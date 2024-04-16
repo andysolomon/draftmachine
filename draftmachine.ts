@@ -17,7 +17,7 @@ type ProspectCombine = {
    coneDrill: number
 }
 type DraftProspect = {
-    athlete: Athlete
+    athlete: IAthlete
     combine: ProspectCombine
     projectedRound: number
 }
@@ -30,7 +30,7 @@ type College = {
     major: string
     url: string
 }
-type Athlete = {
+type IAthlete = {
     firstName: string
     lastName: string
     dateOfBirth: Date
@@ -101,7 +101,7 @@ enum FootballSpecialTeamsPositions {
 }
 
 type BasketballStats = {
-    athlete: Athlete
+    athlete: IAthlete
     position: BasketballPositions
     points: number
     rebounds: number
@@ -125,7 +125,7 @@ type BasketballStats = {
 }
 
 type FootballStats = {
-    athlete: Athlete
+    athlete: IAthlete
     position: FootballOffensiveSkillPositions | FootballOffensiveLinePositions | FootballDefensiveLinePositions | FootballDefensiveLineBackerPositions | FootballDefensiveBackPositions | FootballSpecialTeamsPositions 
     gamesPlayed: number
     gamesStarted: number
@@ -208,6 +208,18 @@ type FootballStatsLinebacker = {
     tacklesForLoss: number
     quarterbackHurries: number
 }
+type FootballStatsDefensiveLineBacker = {
+    tackles: number
+    sacks: number
+    interceptions: number
+    passesDefended: number
+    forcedFumbles: number
+    fumbleRecoveries: number
+    defensiveTouchdowns: number
+    quarterbackHits: number
+    tacklesForLoss: number
+    quarterbackHurries: number
+}
 type FootballStatsDefensiveBack = {
     tackles: number
     sacks: number
@@ -257,33 +269,33 @@ type FootballStatsSpecialTeams = {
 }
 
 export interface IBasketballPlayer {
-    readonly athlete: Athlete
+    readonly athlete: IAthlete
     position: BasketballPositions
     currentTeamId: number
     currentSeasonStats: BasketballStats
 }
 type FootballPlayer = {
-    athlete: Athlete
+    athlete: IAthlete
     position: FootballOffensiveLinePositions | FootballOffensiveSkillPositions | FootballDefensiveLinePositions | FootballDefensiveLineBackerPositions | FootballDefensiveBackPositions | FootballSpecialTeamsPositions
     currentTeamId: number
     currentSeasonStats: FootballStats
 }
 type DepthChart = {
-   name: Array<Athlete>
+   name: Array<IAthlete>
 }
 type BasketballDepthChart = {
-    pg1: BasketballPlayer
-    pg2: BasketballPlayer
-    sg1: BasketballPlayer
-    sg2: BasketballPlayer
-    sf1: BasketballPlayer
-    sf2: BasketballPlayer
-    pf1: BasketballPlayer
-    pf2: BasketballPlayer
-    c1: BasketballPlayer
-    c2: BasketballPlayer
-    reserve1: BasketballPlayer
-    reserve2: BasketballPlayer
+    pg1: BasketballPlayer | null
+    pg2: BasketballPlayer | null
+    sg1: BasketballPlayer | null
+    sg2: BasketballPlayer | null
+    sf1: BasketballPlayer | null
+    sf2: BasketballPlayer | null
+    pf1: BasketballPlayer | null
+    pf2: BasketballPlayer | null
+    c1: BasketballPlayer | null
+    c2: BasketballPlayer | null
+    reserve1: BasketballPlayer | null
+    reserve2: BasketballPlayer | null
 }
 type BasketballStartingLineup = {
     pg1: BasketballPlayer
@@ -362,7 +374,7 @@ type FootballSpecialTeamsDepthChart = {
 interface IBasketballTeam {
     depthChart: BasketballDepthChart
     startingLineup: Array<BasketballPlayer> 
-    readonly teamId: number
+    readonly teamId: string
 }
 interface IFootballTeam {
    depthChart: DepthChart
@@ -407,7 +419,7 @@ class Prospect {}
 // team and depth chart.
 export class BasketballTeam extends Team implements IBasketballTeam {
    private _depthChart: BasketballDepthChart
-   _startingLineup: Array<BasketballPlayer>
+   private _startingLineup: Array<BasketballPlayer> = []
    private readonly _teamId: string
 
    constructor(name: string, location = '',  depthChart: BasketballDepthChart = {
@@ -452,12 +464,12 @@ export class BasketballTeam extends Team implements IBasketballTeam {
         return this._startingLineup
     }
 
-    updateDepthChart(position: keyof BasketballPositions, player: BasketballPlayer | null): void {
-        if (position in this._depthChart) {
+    updateDepthChart(position: keyof BasketballDepthChart, player: BasketballPlayer | null): void {
+        if (position in this.depthChart) {
             if (player !== null && this.isPlayerInDepthChart(player)) {
                 throw new Error("Player is already assigned to a position in the depth chart.");
             }
-            this._depthChart[position] = player;
+            this.depthChart[position] = player;
         } else {
             throw new Error(`Invalid position: ${position}`);
         }
@@ -488,12 +500,12 @@ export class BasketballTeam extends Team implements IBasketballTeam {
 }
 
 export class BasketballPlayer extends Player implements IBasketballPlayer {
-    private _athlete: Athlete
+    private _athlete: IAthlete
     position: BasketballPositions
     currentTeamId: number
     currentSeasonStats: BasketballStats
 
-    constructor(athlete: Athlete, position: BasketballPositions, currentTeamId: number, currentSeasonStats: BasketballStats) {
+    constructor(athlete: IAthlete, position: BasketballPositions, currentTeamId: number, currentSeasonStats: BasketballStats) {
         super()
         this._athlete = athlete
         this.position = position
@@ -502,7 +514,7 @@ export class BasketballPlayer extends Player implements IBasketballPlayer {
     }
 
     set
-    athlete(val: Athlete) {
+    athlete(val: IAthlete) {
         throw new Error("Cannot modify athlete");
     }
 
@@ -513,7 +525,7 @@ export class BasketballPlayer extends Player implements IBasketballPlayer {
 }
 // <<< Basketball
 // Generic Athlete >>>
-export class Athlete implements Athlete {
+export class Athlete implements IAthlete {
     firstName: string
     lastName: string
     dateOfBirth: Date
