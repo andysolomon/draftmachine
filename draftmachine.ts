@@ -17,7 +17,7 @@ type ProspectCombine = {
    coneDrill: number
 }
 type DraftProspect = {
-    athlete: Athlete
+    athlete: IAthlete
     combine: ProspectCombine
     projectedRound: number
 }
@@ -30,7 +30,7 @@ type College = {
     major: string
     url: string
 }
-type Athlete = {
+type IAthlete = {
     firstName: string
     lastName: string
     dateOfBirth: Date
@@ -101,7 +101,7 @@ enum FootballSpecialTeamsPositions {
 }
 
 type BasketballStats = {
-    athlete: Athlete
+    athlete: IAthlete
     position: BasketballPositions
     points: number
     rebounds: number
@@ -125,7 +125,7 @@ type BasketballStats = {
 }
 
 type FootballStats = {
-    athlete: Athlete
+    athlete: IAthlete
     position: FootballOffensiveSkillPositions | FootballOffensiveLinePositions | FootballDefensiveLinePositions | FootballDefensiveLineBackerPositions | FootballDefensiveBackPositions | FootballSpecialTeamsPositions 
     gamesPlayed: number
     gamesStarted: number
@@ -257,19 +257,19 @@ type FootballStatsSpecialTeams = {
 }
 
 export interface IBasketballPlayer {
-    readonly athlete: Athlete
+    readonly athlete: IAthlete
     position: BasketballPositions
     currentTeamId: number
     currentSeasonStats: BasketballStats
 }
 type FootballPlayer = {
-    athlete: Athlete
+    athlete: IAthlete
     position: FootballOffensiveLinePositions | FootballOffensiveSkillPositions | FootballDefensiveLinePositions | FootballDefensiveLineBackerPositions | FootballDefensiveBackPositions | FootballSpecialTeamsPositions
     currentTeamId: number
     currentSeasonStats: FootballStats
 }
 type DepthChart = {
-   name: Array<Athlete>
+   name: Array<IAthlete>
 }
 type BasketballDepthChart = {
     pg1: BasketballPlayer
@@ -488,12 +488,12 @@ export class BasketballTeam extends Team implements IBasketballTeam {
 }
 
 export class BasketballPlayer extends Player implements IBasketballPlayer {
-    private _athlete: Athlete
+    private _athlete: IAthlete
     position: BasketballPositions
     currentTeamId: number
     currentSeasonStats: BasketballStats
 
-    constructor(athlete: Athlete, position: BasketballPositions, currentTeamId: number, currentSeasonStats: BasketballStats) {
+    constructor(athlete: IAthlete, position: BasketballPositions, currentTeamId: number, currentSeasonStats: BasketballStats) {
         super()
         this._athlete = athlete
         this.position = position
@@ -502,7 +502,7 @@ export class BasketballPlayer extends Player implements IBasketballPlayer {
     }
 
     set
-    athlete(val: Athlete) {
+    athlete(val: IAthlete) {
         throw new Error("Cannot modify athlete");
     }
 
@@ -513,7 +513,7 @@ export class BasketballPlayer extends Player implements IBasketballPlayer {
 }
 // <<< Basketball
 // Generic Athlete >>>
-export class Athlete implements Athlete {
+export class Athlete implements IAthlete {
     firstName: string
     lastName: string
     dateOfBirth: Date
