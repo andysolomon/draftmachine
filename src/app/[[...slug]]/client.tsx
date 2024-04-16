@@ -6,5 +6,5 @@ import dynamic from 'next/dynamic'
 // const App = dynamic(() => import('../../App'), { ssr: false })
  
 export function ClientOnly() {
-  return <div>Client Only</div>
+  return <div className="text-3xl font-bold underline">Client Only</div>
 }
