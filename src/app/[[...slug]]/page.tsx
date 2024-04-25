@@ -7,6 +7,8 @@ export function generateStaticParams() {
  
 export default async function Page() {
     const posts = await db.query.posts.findMany()
+    const athletes = await db.query.Athlete.findMany()
     console.log('Posts :: ', posts)
-    return <ClientOnly />
+    console.log('Athletes :: ', athletes)
+    return <ClientOnly athletes={athletes} />
 }
