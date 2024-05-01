@@ -6,12 +6,7 @@ export default async function Page() {
 
     return (
         <main>
-            <h1>Posts</h1>
-            <ul>
-                {posts.map((post) => (
-                    <li key={post.id}>{post.name}</li>
-                ))}
-            </ul>
+			<h1>Welcome</h1>
             <h1>Athletes</h1>
             <ul>
                 {athletes.map((athlete) => (
