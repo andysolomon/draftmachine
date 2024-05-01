@@ -9,4 +9,7 @@ export default {
     connectionString: env.POSTGRES_URL,
   },
   tablesFilter: ["draftmanager_*"],
+  verbose: true,
+  strict: true,
+  out: "./drizzle",
 } satisfies Config;

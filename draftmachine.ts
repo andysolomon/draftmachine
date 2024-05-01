@@ -30,16 +30,16 @@ type College = {
     major: string
     url: string
 }
-type IAthlete = {
+export type IAthlete = {
     firstName: string
     lastName: string
-    dateOfBirth: Date
-    college: College
-    highSchool: string
-    height: number
-    weight: number
-    positionFootball: string
-    positionBasketball: string
+    dateOfBirth: Date | string | null
+    college: College | string | null
+    highSchool: string | null
+    height: number | string | null
+    weight: number | string | null
+    positionFootball: string | null
+    positionBasketball: string | null
 }
 
 export enum BasketballPositions {
