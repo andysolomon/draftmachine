@@ -15,7 +15,7 @@ router.post("/add-athlete", async (req, res) => {
       firstName,
       lastName,
       dateOfBirth,
-      collegeId,
+      college,
       highSchool,
       height,
       weight,
@@ -40,7 +40,7 @@ router.post("/add-athlete", async (req, res) => {
       firstName,
       lastName,
       dateOfBirth: dateOfBirth, // Ensure date is in the correct format
-      collegeId: collegeId || null,
+      college: college || null,
       highSchool: highSchool || null,
       height: parseInt(height, 10),
       weight: parseInt(weight, 10),
@@ -49,9 +49,11 @@ router.post("/add-athlete", async (req, res) => {
     }).returning();
 
     res.status(201).json({ message: "Athlete created successfully", athlete: newAthlete });
-  } catch (error) {
-    console.error("Error creating athlete", error.message);
-    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    
+    console.error("Error creating athlete", errorMessage);
+    res.status(500).json({ message: "Internal Server Error", error: errorMessage });
   }
 });
 
