@@ -50,40 +50,40 @@ export enum BasketballPositions {
     center
 }
 
-enum FootballOffensiveLinePositions {
+export enum FootballOffensiveLinePositions {
     center,
     leftGuard,
     rightGuard,
     leftTackle,
     rightTackle,
 }
-enum FootballOffensiveSkillPositions {
+export enum FootballOffensiveSkillPositions {
     quarterback,
     runningBack,
     fullBack,
     tightEnd,
     wideReceiver,
 }
-enum FootballDefensiveLinePositions {
+export enum FootballDefensiveLinePositions {
     defensiveTackle,
     defensiveEnd,
     edgeRusher,
 }
-enum FootballDefensiveLineBackerPositions {
+export enum FootballDefensiveLineBackerPositions {
     middleLinebacker,
     outsideLinebacker,
     weakSideLinebacker,
     strongSideLinebacker,
     edgeRusher,
 }
-enum FootballDefensiveBackPositions {
+export enum FootballDefensiveBackPositions {
     cornerback,
     freeSafety,
     strongSafety,
     nickelBack,
     dimeBack,
 }
-enum FootballSpecialTeamsPositions {
+export enum FootballSpecialTeamsPositions {
     kicker,
     punter,
     longSnapper,
@@ -371,9 +371,11 @@ type FootballSpecialTeamsDepthChart = {
     longSnapper1: FootballPlayer
     longSnapper2: FootballPlayer
 }
-interface IBasketballTeam {
+export interface IBasketballTeam {
     depthChart: BasketballDepthChart
     startingLineup: Array<BasketballPlayer> 
+    name: string
+    location: string
     readonly teamId: string
 }
 interface IFootballTeam {

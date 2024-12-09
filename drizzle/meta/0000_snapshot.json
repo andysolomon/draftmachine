@@ -1,10 +1,435 @@
 {
-  "id": "00000000-0000-0000-0000-000000000000",
-  "prevId": "",
-  "version": "5",
-  "dialect": "pg",
+  "id": "f97f2966-1a8a-4b0e-8072-254da239c63c",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "draftmanager_post": {
+    "public.athlete": {
+      "name": "athlete",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date_of_birth": {
+          "name": "date_of_birth",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "college": {
+          "name": "college",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "high_school": {
+          "name": "high_school",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "height": {
+          "name": "height",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "weight": {
+          "name": "weight",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "position_football": {
+          "name": "position_football",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "basketball_positions": {
+          "name": "basketball_positions",
+          "type": "basketball_positions",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.basketball_player": {
+      "name": "basketball_player",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "athlete_id": {
+          "name": "athlete_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "basketball_positions": {
+          "name": "basketball_positions",
+          "type": "basketball_positions",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "current_team_id": {
+          "name": "current_team_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "basketball_player_athlete_id_athlete_id_fk": {
+          "name": "basketball_player_athlete_id_athlete_id_fk",
+          "tableFrom": "basketball_player",
+          "tableTo": "athlete",
+          "columnsFrom": [
+            "athlete_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_player_current_team_id_basketball_team_id_fk": {
+          "name": "basketball_player_current_team_id_basketball_team_id_fk",
+          "tableFrom": "basketball_player",
+          "tableTo": "basketball_team",
+          "columnsFrom": [
+            "current_team_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.basketball_team": {
+      "name": "basketball_team",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "location": {
+          "name": "location",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.basketball_team_depth_chart": {
+      "name": "basketball_team_depth_chart",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "team_id": {
+          "name": "team_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pg1": {
+          "name": "pg1",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pg2": {
+          "name": "pg2",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sg1": {
+          "name": "sg1",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sg2": {
+          "name": "sg2",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sf1": {
+          "name": "sf1",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sf2": {
+          "name": "sf2",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pf1": {
+          "name": "pf1",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pf2": {
+          "name": "pf2",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "c1": {
+          "name": "c1",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "c2": {
+          "name": "c2",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reserve1": {
+          "name": "reserve1",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reserve2": {
+          "name": "reserve2",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "basketball_team_depth_chart_team_id_basketball_team_id_fk": {
+          "name": "basketball_team_depth_chart_team_id_basketball_team_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_team",
+          "columnsFrom": [
+            "team_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_team_depth_chart_pg1_basketball_player_id_fk": {
+          "name": "basketball_team_depth_chart_pg1_basketball_player_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_player",
+          "columnsFrom": [
+            "pg1"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_team_depth_chart_pg2_basketball_player_id_fk": {
+          "name": "basketball_team_depth_chart_pg2_basketball_player_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_player",
+          "columnsFrom": [
+            "pg2"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_team_depth_chart_sg1_basketball_player_id_fk": {
+          "name": "basketball_team_depth_chart_sg1_basketball_player_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_player",
+          "columnsFrom": [
+            "sg1"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_team_depth_chart_sg2_basketball_player_id_fk": {
+          "name": "basketball_team_depth_chart_sg2_basketball_player_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_player",
+          "columnsFrom": [
+            "sg2"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_team_depth_chart_sf1_basketball_player_id_fk": {
+          "name": "basketball_team_depth_chart_sf1_basketball_player_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_player",
+          "columnsFrom": [
+            "sf1"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_team_depth_chart_sf2_basketball_player_id_fk": {
+          "name": "basketball_team_depth_chart_sf2_basketball_player_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_player",
+          "columnsFrom": [
+            "sf2"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_team_depth_chart_pf1_basketball_player_id_fk": {
+          "name": "basketball_team_depth_chart_pf1_basketball_player_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_player",
+          "columnsFrom": [
+            "pf1"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_team_depth_chart_pf2_basketball_player_id_fk": {
+          "name": "basketball_team_depth_chart_pf2_basketball_player_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_player",
+          "columnsFrom": [
+            "pf2"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_team_depth_chart_c1_basketball_player_id_fk": {
+          "name": "basketball_team_depth_chart_c1_basketball_player_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_player",
+          "columnsFrom": [
+            "c1"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_team_depth_chart_c2_basketball_player_id_fk": {
+          "name": "basketball_team_depth_chart_c2_basketball_player_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_player",
+          "columnsFrom": [
+            "c2"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_team_depth_chart_reserve1_basketball_player_id_fk": {
+          "name": "basketball_team_depth_chart_reserve1_basketball_player_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_player",
+          "columnsFrom": [
+            "reserve1"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "basketball_team_depth_chart_reserve2_basketball_player_id_fk": {
+          "name": "basketball_team_depth_chart_reserve2_basketball_player_id_fk",
+          "tableFrom": "basketball_team_depth_chart",
+          "tableTo": "basketball_player",
+          "columnsFrom": [
+            "reserve2"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.draftmanager_post": {
       "name": "draftmanager_post",
       "schema": "",
       "columns": {
@@ -27,20 +452,29 @@
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {
         "name_idx": {
           "name": "name_idx",
           "columns": [
-            "name"
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {},
@@ -48,11 +482,24 @@
       "uniqueConstraints": {}
     }
   },
-  "enums": {},
+  "enums": {
+    "public.basketball_positions": {
+      "name": "basketball_positions",
+      "schema": "public",
+      "values": [
+        "pointGuard",
+        "shootingGuard",
+        "smallForward",
+        "powerForward",
+        "center"
+      ]
+    }
+  },
   "schemas": {},
+  "sequences": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
+    "tables": {}
   }
 }
